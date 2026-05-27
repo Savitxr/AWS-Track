@@ -9,10 +9,12 @@ This document is designed to act as your complete learning companion and archite
 
 The following diagram illustrates the network layout, subnets, and routing paths established in this lab.
 
-![alt text](image-1.png)
 ---
-![alt text](Site2SiteVpn.png)
+<img width="2100" height="1163" alt="Site2SiteVpn" src="https://github.com/user-attachments/assets/593532d6-340e-47b5-b384-9d3a2949c2d3" />
+
 ---
+<img width="3120" height="1740" alt="image-1" src="https://github.com/user-attachments/assets/1b17d958-134b-410e-99f1-cac9421083d3" />
+
 
 ## 📘 2. Step-by-Step Lab Execution with Deep-Dive Explanations
 
