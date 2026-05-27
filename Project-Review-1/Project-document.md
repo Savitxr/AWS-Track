@@ -5,7 +5,7 @@ Welcome to **FanVault v2**, a production-grade, highly available, secure, and au
 This repository documents the complete end-to-end infrastructure, application deployment, networking, and security architecture of the platform. By following this guide, anyone with basic AWS experience will be able to replicate and deploy this system from scratch.
 
 ### Github Project Repo 
-    ---> [Fanvault-v2](https://github.com/Savitxr/Fanvault-v2.git)
+[Fanvault-v2](https://github.com/Savitxr/Fanvault-v2.git)
 ---
 
 ## 1. Architectural Blueprint
