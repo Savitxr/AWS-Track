@@ -1,4 +1,4 @@
-# AWS Config: Cloud Governance & Automated Remediation
+<img width="1536" height="1024" alt="ChatGPT Image Jun 4, 2026, 11_55_40 AM" src="https://github.com/user-attachments/assets/2692039b-7cb0-442b-8f82-4f1df041907c" /># AWS Config: Cloud Governance & Automated Remediation
 ### 📖 Comprehensive Governance Framework, Systems Manager Integration, & Real-World Scenarios
 
 This guide serves as an engineering manual and self-learning workbook for AWS Config and AWS Systems Manager (SSM). It establishes the operational mindset required to manage cloud environments at scale, detailing how to turn on configuration recording, define policy rules, audit changes, and execute automated remediations.
@@ -90,19 +90,8 @@ Effective cloud governance requires two distinct phases: **Detection** (identify
 
 ## 📘 PART 4 — THE GOVERNANCE LOOP: TECHNICAL WORKFLOW
 
-```
-  1. TRIGGER (API Call)         2. DETECTION (Recorder)        3. EVALUATION (Config Rule)
-┌───────────────────────┐      ┌───────────────────────┐      ┌───────────────────────────┐
-│ User alters a Security│ ───► │ Recorder creates a    │ ───► │ Config Rule flags state   │
-│ Group config rule     │      │ new JSON state CI     │      │ as "NON_COMPLIANT"        │
-└───────────────────────┘      └───────────────────────┘      └─────────────┬─────────────┘
-                                                                            │
-  5. RESOLUTION (Compliant)     4. REMEDIATION (SSM Doc)                    │
-┌───────────────────────┐      ┌───────────────────────┐                    │
-│ Config records new    │ ◄─── │ SSM Runbook executes  │ ◄──────────────────┘
-│ state as COMPLIANT    │      │ the automated fix     │
-└───────────────────────┘      └───────────────────────┘
-```
+<img width="1536" height="1024" alt="aws-config-architecture" src="https://github.com/user-attachments/assets/92e1648c-aa8a-4f19-9e0b-a64de1d14e04" />
+
 
 1.  **Trigger (The Change):** A configuration change occurs. For example, a developer disables the "Block Public Access" switch on a sensitive S3 bucket.
 2.  **Detection (Recording):** The Configuration Recorder detects the API modification event, captures the new state, and generates a fresh Configuration Item (CI).
@@ -150,19 +139,8 @@ An organization has a budget policy that restricts EC2 instances to the cost-eff
 #### Scenario:
 An administrator wants to guarantee that no S3 bucket in the account can ever be exposed to the public internet. If someone attempts to disable the S3 public access block, AWS Config and Systems Manager must automatically detect and revert the change immediately.
 
-```
-       1. USER DISABLES BPA                   2. CONFIG RULES DETECT                   3. AUTO-REMEDIAL FIX
-┌───────────────────────────────┐              ┌───────────────────────────────┐              ┌───────────────────────────────┐
-│ User unchecks S3 "Block All   │ ─── Config ──► S3 bucket flagged as          │ ─── Trigger ─► SSM Runbook re-enables        │
-│ Public Access" in Console     │    Stream    │ NON_COMPLIANT                 │     SSM      │ S3 Block Public Access        │
-└───────────────────────────────┘              └───────────────────────────────┘              └───────────────┬───────────────┘
-                                                                                                              │
-                                                                                                              ▼
-                                                                                              ┌───────────────────────────────┐
-                                                                                              │ S3 Bucket auto-reverts back   │
-                                                                                              │ to secure COMPLIANT state     │
-                                                                                              └───────────────────────────────┘
-```
+<img width="1536" height="1024" alt="Demo3-config" src="https://github.com/user-attachments/assets/0183e767-323b-4364-9aea-b8886fbbecc1" />
+
 
 #### Console Steps & Actions:
 1.  **Configure the Managed Rule & Remediation:**
