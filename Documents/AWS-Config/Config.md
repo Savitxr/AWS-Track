@@ -1,4 +1,4 @@
-<img width="1536" height="1024" alt="ChatGPT Image Jun 4, 2026, 11_55_40 AM" src="https://github.com/user-attachments/assets/2692039b-7cb0-442b-8f82-4f1df041907c" /># AWS Config: Cloud Governance & Automated Remediation
+# AWS Config: Cloud Governance & Automated Remediation
 ### 📖 Comprehensive Governance Framework, Systems Manager Integration, & Real-World Scenarios
 
 This guide serves as an engineering manual and self-learning workbook for AWS Config and AWS Systems Manager (SSM). It establishes the operational mindset required to manage cloud environments at scale, detailing how to turn on configuration recording, define policy rules, audit changes, and execute automated remediations.
