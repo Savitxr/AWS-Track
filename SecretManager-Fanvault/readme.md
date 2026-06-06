@@ -127,20 +127,7 @@ By migrating to this design:
 - **Fine-Grained Auditing**: AWS CloudTrail audits every attempt to access SSM parameters, pull secrets, or decrypt images using the KMS key.
 
 ---
-## Secrets Manager
-<img width="1915" height="919" alt="Screenshot 2026-06-06 095058" src="https://github.com/user-attachments/assets/07ec14a3-d9cb-4dd5-88cd-513f3e619c3c" />
-
----
-## S3 KMS Server-side Encryption
-<img width="1918" height="914" alt="Screenshot 2026-06-06 095451" src="https://github.com/user-attachments/assets/e0d3f9c1-5690-4eb2-9330-6d2d53d6e544" />
-
----
-## Parameter store for BucketName and Region
-<img width="1919" height="912" alt="Screenshot 2026-06-06 095330" src="https://github.com/user-attachments/assets/ae192296-7f1c-4692-a03e-d4b749f589c2" />
-
----
-## IAM Role for Ec2 to Access Secrets Manager, Parameter Store, S3
-<img width="1915" height="919" alt="Screenshot 2026-06-06 095058" src="https://github.com/user-attachments/assets/9dd683d8-88dd-474f-996f-87f93afc8fc5" />
+<img width="1200" height="575" alt="image" src="https://github.com/user-attachments/assets/0d2b1e21-0e28-458e-865c-759d12bc67b4" />
 
 ---
 ## Application Screenshot
