@@ -126,8 +126,6 @@ By migrating to this design:
 - **Least-Privilege Networking**: Local Node.js services run on `127.0.0.1` and are protected from external internet scanning.
 - **Fine-Grained Auditing**: AWS CloudTrail audits every attempt to access SSM parameters, pull secrets, or decrypt images using the KMS key.
 
----
-<img width="1200" height="575" alt="image" src="https://github.com/user-attachments/assets/0d2b1e21-0e28-458e-865c-759d12bc67b4" />
 
 ---
 ## Application Screenshot
