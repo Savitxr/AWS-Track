@@ -1,4 +1,4 @@
-# Reimplementation Guide: Monolithic FanVault Architecture
+# Implementation: Monolithic FanVault-v2 Architecture
 
 This guide provides step-by-step instructions to recreate the secure monolithic App Server + remote Database Server architecture on AWS from scratch.
 
