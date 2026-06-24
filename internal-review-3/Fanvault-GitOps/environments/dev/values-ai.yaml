@@ -1,0 +1,16 @@
+replicaCount: 2
+hpa:
+  maxReplicas: 4
+config:
+  ENVIRONMENT: "development"
+  S3_PRODUCT_IMAGES_BUCKET: "fanvault-dev-product-images-773384830607"
+  BEDROCK_ASSUME_ROLE_ARN: "arn:aws:iam::899071933396:role/fanvault-bedrock-cross-account-role"
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::773384830607:role/fanvault-ai-irsa-role"
+# image.repository and image.tag are updated automatically by CI/CD on each deploy
+image:
+  repository: "773384830607.dkr.ecr.us-east-1.amazonaws.com/fanvault-dev-ai-service"
+  tag: "v0.7.1"
+serviceMonitor:
+  enabled: true

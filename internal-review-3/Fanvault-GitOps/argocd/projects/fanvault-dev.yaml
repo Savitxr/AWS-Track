@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: fanvault-dev
+  namespace: argocd
+spec:
+  description: FanVault Development Environment
+  sourceRepos:
+  - "https://github.com/Fanvault-CloudOps/Fanvault-GitOps.git"
+  - "https://kgateway.dev/charts"
+  - "https://github.com/kubernetes-sigs/gateway-api"
+  destinations:
+  - namespace: dev
+    server: https://kubernetes.default.svc
+  - namespace: kgateway-system
+    server: https://kubernetes.default.svc
+  - namespace: argocd
+    server: https://kubernetes.default.svc
+  - namespace: "*"
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: ""
+    kind: Namespace
+  - group: gateway.networking.k8s.io
+    kind: GatewayClass
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+  namespaceResourceWhitelist:
+  - group: "*"
+    kind: "*"

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: commerce-service
+description: Helm chart for FanVault V3 Commerce Service (catalog & transactions)
+type: application
+version: 1.0.0
+appVersion: "2.0.0"

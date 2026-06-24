@@ -1,0 +1,23 @@
+replicaCount: 2
+
+image:
+  pullPolicy: IfNotPresent
+
+hpa:
+  minReplicas: 2
+  maxReplicas: 5
+
+config:
+  NODE_ENV: "production"
+  USE_SECRETS_MANAGER: "true"
+  SECRET_ID: "production/fanvault-commerce"
+  COGNITO_REGION: "us-east-1"
+  COGNITO_USER_POOL_ID: "us-east-1_prodUserPoolId"
+  COGNITO_CLIENT_ID: "prodClientIdxxxxxxxxxxxx"
+
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::123456789012:role/fanvault-commerce-irsa-role"
+
+# Production secrets are read from AWS Secrets Manager or configured externally.
+secrets: {}

@@ -1,0 +1,8 @@
+replicaCount: 1
+
+hpa:
+  maxReplicas: 2
+
+config:
+  NODE_ENV: "development"
+  USE_SECRETS_MANAGER: "false"

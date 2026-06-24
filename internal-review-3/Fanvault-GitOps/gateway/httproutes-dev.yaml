@@ -1,0 +1,62 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: fanvault-dev
+  namespace: dev
+spec:
+  parentRefs:
+    - name: fanvault-gateway
+      namespace: kgateway-system
+  hostnames:
+    - "dev.fanvault.garden"
+    - "api-dev.fanvault.garden"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/auth
+      backendRefs:
+        - name: dev-user-service
+          port: 3001
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/users
+      backendRefs:
+        - name: dev-user-service
+          port: 3001
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/products
+      backendRefs:
+        - name: dev-commerce-service
+          port: 3002
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/orders
+      backendRefs:
+        - name: dev-commerce-service
+          port: 3002
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/admin
+      backendRefs:
+        - name: dev-commerce-service
+          port: 3002
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/ai
+      backendRefs:
+        - name: dev-ai-service
+          port: 8000
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: dev-frontend
+          port: 80

@@ -1,0 +1,86 @@
+replicaCount: 1
+
+image:
+  repository: fanvault-user-service
+  pullPolicy: Always
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 3001
+
+containerPort: 3001
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 75
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
+networkPolicy:
+  enabled: true
+  ingress:
+    # Allow traffic from gateway/ingress and frontend
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/component: gateway
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: frontend
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
+
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  path: /metrics
+
+# ServiceAccount variables, including IRSA annotations for AWS role mapping
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+# Application specific configuration loaded via ConfigMap
+config:
+  PORT: "3001"
+  NODE_ENV: "production"
+  AWS_REGION: "us-east-1"
+  DYNAMODB_TABLE_PROFILES: "fanvault-profiles"
+  USE_SECRETS_MANAGER: "false"
+  CORS_ORIGIN: "http://localhost"
+  COGNITO_REGION: "us-east-1"
+  COGNITO_USER_POOL_ID: "us-east-1_xxxxxxxxx"
+  COGNITO_CLIENT_ID: "xxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Secret variables or references to existing secrets
+secrets: {}

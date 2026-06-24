@@ -1,0 +1,90 @@
+replicaCount: 1
+
+image:
+  repository: fanvault-commerce-service
+  pullPolicy: Always
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 3002
+
+containerPort: 3002
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 75
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
+networkPolicy:
+  enabled: true
+  ingress:
+    # Allow traffic from gateway/ingress and frontend
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/component: gateway
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: frontend
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
+
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  path: /metrics
+
+# ServiceAccount variables, including IRSA annotations for AWS role mapping
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+# Application specific configuration loaded via ConfigMap
+config:
+  PORT: "3002"
+  NODE_ENV: "production"
+  AWS_REGION: "us-east-1"
+  DYNAMODB_TABLE_PRODUCTS: "fanvault-products"
+  DYNAMODB_TABLE_ORDERS: "fanvault-orders"
+  DYNAMODB_TABLE_AUDIT_LOGS: "fanvault-audit-logs"
+  DYNAMODB_TABLE_METADATA: "fanvault-metadata"
+  USE_SECRETS_MANAGER: "false"
+  CORS_ORIGIN: "http://localhost"
+  AI_SERVICE_URL: "http://ai-service:8000"
+  COGNITO_REGION: "us-east-1"
+  COGNITO_USER_POOL_ID: "us-east-1_xxxxxxxxx"
+  COGNITO_CLIENT_ID: "xxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Secret variables or references to existing secrets
+secrets: {}

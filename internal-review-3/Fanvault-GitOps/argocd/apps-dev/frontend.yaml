@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dev-frontend
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: fanvault-dev
+  source:
+    repoURL: https://github.com/Fanvault-CloudOps/Fanvault-GitOps.git
+    targetRevision: HEAD
+    path: charts/frontend
+    helm:
+      valueFiles:
+        - values.yaml
+        - ../../environments/dev/values-frontend.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

@@ -1,0 +1,26 @@
+replicaCount: 2
+hpa:
+  maxReplicas: 4
+config:
+  NODE_ENV: "development"
+  USE_SECRETS_MANAGER: "false"
+  COGNITO_REGION: "us-east-1"
+  COGNITO_USER_POOL_ID: "us-east-1_O7cQQXD1P"
+  COGNITO_CLIENT_ID: "3fioa78u18rkf7c3kiqb3sud55"
+  AI_SERVICE_URL: "http://dev-ai-service:8000"
+  DYNAMODB_TABLE_PRODUCTS: "fanvault-dev-products"
+  DYNAMODB_TABLE_ORDERS: "fanvault-dev-orders"
+  DYNAMODB_TABLE_AUDIT_LOGS: "fanvault-dev-audit-logs"
+  DYNAMODB_TABLE_METADATA: "fanvault-dev-metadata"
+  EVENTBRIDGE_BUS_NAME: "fanvault-dev-event-bus"
+  SNS_TOPIC_ORDER_FAILURE: "arn:aws:sns:us-east-1:773384830607:fanvault-dev-order-failure-alerts"
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::773384830607:role/fanvault-commerce-irsa-role"
+# image.repository and image.tag are updated automatically by CI/CD on each deploy
+image:
+  repository: "773384830607.dkr.ecr.us-east-1.amazonaws.com/fanvault-dev-commerce-service"
+  tag: "v0.4.3"
+
+serviceMonitor:
+  enabled: true

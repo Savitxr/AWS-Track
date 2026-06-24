@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: fanvault-prod
+  namespace: argocd
+spec:
+  description: FanVault Production Environment
+  sourceRepos:
+  - "https://github.com/Fanvault-CloudOps/Fanvault-GitOps.git"
+  destinations:
+  - namespace: prod
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: ""
+    kind: Namespace
+  namespaceResourceWhitelist:
+  - group: "*"
+    kind: "*"
+  syncWindows:
+  - kind: allow
+    schedule: "0 8 * * 1-5"
+    duration: 8h
+    applications:
+    - "*"
+    manualSync: true

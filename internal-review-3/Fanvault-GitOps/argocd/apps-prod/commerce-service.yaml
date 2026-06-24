@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prod-commerce-service
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: fanvault-prod
+  source:
+    repoURL: https://github.com/Fanvault-CloudOps/Fanvault-GitOps.git
+    targetRevision: HEAD
+    path: charts/commerce-service
+    helm:
+      valueFiles:
+        - values.yaml
+        - ../../environments/prod/values-commerce.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

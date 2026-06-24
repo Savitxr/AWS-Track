@@ -1,0 +1,71 @@
+replicaCount: 1
+
+image:
+  repository: fanvault-ai-service
+  pullPolicy: Always
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 8000
+
+containerPort: 8000
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 75
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
+networkPolicy:
+  enabled: true
+  ingress:
+    # Only commerce-service is permitted to call the AI service
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: commerce-service
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
+
+# ServiceAccount with IRSA annotation for Bedrock, S3, CloudWatch, Secrets Manager access
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+# Application configuration loaded via ConfigMap
+config:
+  PORT: "8000"
+  ENVIRONMENT: "production"
+  AWS_REGION: "us-east-1"
+  BEDROCK_MODEL_ID: "amazon.nova-pro-v1:0"
+  AI_TIMEOUT_MS: "30000"
+  S3_PRODUCT_IMAGES_BUCKET: "fanvault-dev-product-images-773384830607"
