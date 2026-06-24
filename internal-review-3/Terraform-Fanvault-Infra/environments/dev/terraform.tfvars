@@ -1,0 +1,6 @@
+aws_region         = "us-east-1"
+project_name       = "fanvault"
+environment        = "dev"
+github_repo        = "Fanvault-CloudOps/Fanvault-v3-App"
+jwt_secret         = "CI+SJOC3pumFMisCb1S+2Gd5fNRID9YKuPDYGjjv4ig="
+jwt_refresh_secret = "+9O39IrWtgHnuLwzfsA1yOtC2U/BxjNqPkli+GUOnuo="

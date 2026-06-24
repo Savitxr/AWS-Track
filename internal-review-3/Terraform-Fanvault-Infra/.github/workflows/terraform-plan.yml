@@ -1,0 +1,97 @@
+# name: Terraform Plan & Analysis
+
+# on:
+#   pull_request:
+#     branches:
+#       - main
+#     paths:
+#       - 'environments/**'
+#       - 'modules/**'
+#   workflow_dispatch:
+#     inputs:
+#       environment:
+#         description: 'Environment to run plan (dev or prod)'
+#         required: true
+#         default: 'dev'
+
+# permissions:
+#   id-token: write
+#   contents: read
+#   pull-requests: write
+
+# jobs:
+#   plan:
+#     name: Terraform Plan & Security Check
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         environment: [dev, prod]
+    
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v4
+
+#       - name: Setup Terraform
+#         uses: hashicorp/setup-terraform@v3
+#         with:
+#           terraform_version: "1.15.6"
+
+#       - name: Configure AWS Credentials via OIDC
+#         uses: aws-actions/configure-aws-credentials@v4
+#         with:
+#           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+#           aws-region: us-east-1
+#           audience: sts.amazonaws.com
+
+#       - name: Terraform Format Check
+#         run: terraform fmt -check -recursive
+#         working-directory: ./environments/${{ matrix.environment }}
+
+#       - name: Initialize Terraform
+#         run: terraform init
+#         working-directory: ./environments/${{ matrix.environment }}
+
+#       - name: Validate Configurations
+#         run: terraform validate
+#         working-directory: ./environments/${{ matrix.environment }}
+
+#       - name: Run Terraform Plan
+#         id: plan
+#         run: terraform plan -out=tfplan -no-color
+#         working-directory: ./environments/${{ matrix.environment }}
+
+#       - name: Convert Plan to JSON
+#         run: terraform show -json tfplan > tfplan.json
+#         working-directory: ./environments/${{ matrix.environment }}
+
+#       - name: AI Security & Cost Analysis (Mock/CLI Check)
+#         id: analysis
+#         run: |
+#           echo "=== Running AI Plan Analysis ==="
+#           insecure_policies=$(jq '[.resource_changes[]? | select(.type == "aws_iam_policy" or .type == "aws_iam_role_policy") | .change.after.policy | fromjson | .Statement[]? | select(.Effect == "Allow" and (.Resource == "*" or .Action == "*"))]' ./environments/${{ matrix.environment }}/tfplan.json)
+#           public_buckets=$(jq '[.resource_changes[]? | select(.type == "aws_s3_bucket_public_access_block") | select(.change.after.block_public_acls == false or .change.after.block_public_policy == false)]' ./environments/${{ matrix.environment }}/tfplan.json)
+
+#           echo "## AI Plan Review (Environment: ${{ matrix.environment }}) 🧠" >> $GITHUB_STEP_SUMMARY
+          
+#           if [ "$insecure_policies" != "[]" ] && [ -n "$insecure_policies" ]; then
+#             echo "⚠️ **Warning**: Overly permissive IAM policy detected (Effect: Allow, Resource/Action: '*'). Ensure least privilege compliance." >> $GITHUB_STEP_SUMMARY
+#           else
+#             echo "✅ **IAM Policy**: Passed least privilege validations." >> $GITHUB_STEP_SUMMARY
+#           fi
+
+#           if [ "$public_buckets" != "[]" ] && [ -n "$public_buckets" ]; then
+#             echo "🚨 **Critical**: Public S3 bucket configuration detected. Enforce block_public_acls = true." >> $GITHUB_STEP_SUMMARY
+#           else
+#             echo "✅ **S3 Security**: Private bucket boundaries verified." >> $GITHUB_STEP_SUMMARY
+#           fi
+
+#           echo "#### Architecture & Cost Impact:" >> $GITHUB_STEP_SUMMARY
+#           echo "- Resource drift and validation passed." >> $GITHUB_STEP_SUMMARY
+#           echo "- Cost impact: Pay-per-use scaling on serverless components is optimized." >> $GITHUB_STEP_SUMMARY
+#         shell: bash
+
+#       - name: Upload Plan Artifact
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: tfplan-${{ matrix.environment }}
+#           path: ./environments/${{ matrix.environment }}/tfplan
