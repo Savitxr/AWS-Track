@@ -1,0 +1,41 @@
+.profile-container { max-width: 960px; }
+.profile-layout { display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: start; }
+.profile-sidebar { position: sticky; top: 88px; }
+
+.profile-avatar-card { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.profile-avatar-large { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%); color: white; font-size: 28px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.profile-email { font-size: 13px; color: var(--text-secondary); word-break: break-all; margin: 0; }
+.profile-name { font-size: 16px; font-weight: 700; color: var(--text-primary); margin: 0; }
+
+.profile-main { display: flex; flex-direction: column; gap: 20px; }
+.profile-section h3 { font-size: 16px; margin: 0; }
+
+.section-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+
+.profile-form { display: flex; flex-direction: column; gap: 16px; }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.profile-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.info-item { display: flex; flex-direction: column; gap: 4px; }
+.info-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; color: var(--text-muted); }
+.info-value { font-size: 15px; font-weight: 500; color: var(--text-primary); }
+
+.add-addr-form { background: var(--gray-50); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 16px; }
+
+.addresses-list { display: flex; flex-direction: column; gap: 12px; }
+.address-card { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 16px; border: 1.5px solid var(--border); border-radius: var(--radius); }
+.address-card.default { border-color: var(--brand); background: var(--brand-50); }
+.address-info p { font-size: 14px; color: var(--text-secondary); margin: 0 0 2px; }
+.remove-addr-btn { flex-shrink: 0; color: #dc2626; }
+
+.checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--text-secondary); cursor: pointer; }
+.checkbox-label input { accent-color: var(--brand); width: 16px; height: 16px; }
+
+.pref-items { display: flex; flex-direction: column; gap: 12px; }
+
+@media (max-width: 768px) {
+  .profile-layout { grid-template-columns: 1fr; }
+  .profile-sidebar { position: static; }
+  .form-grid-2 { grid-template-columns: 1fr; }
+  .profile-info-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,56 @@
+name: Terraform PR Verification
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  validate:
+    name: Format, Validate & Plan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+          audience: sts.amazonaws.com
+
+      - name: Check Formatting
+        run: terraform fmt -check
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Validate Configuration
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: tfplan
+
+      - name: Generate Workflow Summary
+        run: |
+          echo "### Terraform Plan Summary 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "Terraform formatting, validation, and plan completed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "#### Details:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Format Check**: Passed ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- **Validation**: Passed ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- **Plan Artifact**: Uploaded as \`tfplan\` 📦" >> $GITHUB_STEP_SUMMARY

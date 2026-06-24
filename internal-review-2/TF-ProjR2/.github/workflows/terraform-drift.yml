@@ -1,0 +1,61 @@
+name: Terraform Drift Detection
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  drift:
+    name: Check for Drift
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+          audience: sts.amazonaws.com
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Detect Infrastructure Drift
+        id: detect
+        run: |
+          set +e
+          terraform plan -detailed-exitcode -out=tfplan
+          exit_code=$?
+          echo "exit_code=$exit_code" >> $GITHUB_OUTPUT
+          if [ $exit_code -eq 2 ]; then
+            echo "DRIFT_DETECTED=true" >> $GITHUB_ENV
+            echo "Infrastructure drift detected!"
+          elif [ $exit_code -eq 0 ]; then
+            echo "DRIFT_DETECTED=false" >> $GITHUB_ENV
+            echo "No drift detected. Infrastructure is in sync."
+          else
+            echo "Error: Terraform plan execution failed."
+            exit 1
+          fi
+
+      - name: Generate Drift Summary
+        run: |
+          echo "### Terraform Drift Detection Summary 🔍" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ env.DRIFT_DETECTED }}" = "true" ]; then
+            echo "⚠️ **WARNING**: Infrastructure drift was detected between current AWS resources and the Terraform configuration!" >> $GITHUB_STEP_SUMMARY
+            echo "Please review the drift details in the logs of the \`Detect Infrastructure Drift\` step." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "✅ **SUCCESS**: No infrastructure drift detected. The AWS resources match the Terraform configuration exactly." >> $GITHUB_STEP_SUMMARY
+          fi

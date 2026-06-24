@@ -1,0 +1,78 @@
+/* Auth pages – shared */
+.auth-page {
+  min-height: calc(100vh - 68px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.auth-card {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 48px;
+  border-radius: 0;
+  border: none;
+  border-right: 1px solid var(--border);
+  min-height: 100%;
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--brand);
+}
+.auth-logo svg { color: var(--brand); }
+
+.auth-header h1 { font-size: 2rem; margin-bottom: 8px; }
+.auth-header p { color: var(--text-secondary); margin: 0; font-size: 15px; }
+
+.auth-form { display: flex; flex-direction: column; gap: 20px; }
+
+.input-with-icon { position: relative; }
+.input-with-icon .form-input { padding-right: 44px; }
+.input-icon-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+.input-icon-btn:hover { color: var(--text-primary); }
+
+.password-checks { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.password-check { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); transition: color var(--transition); }
+.password-check.met { color: var(--brand); }
+.password-check svg { flex-shrink: 0; }
+
+.auth-switch { font-size: 14px; color: var(--text-secondary); text-align: center; }
+.auth-switch a { color: var(--brand); font-weight: 600; }
+
+/* Illustration panel */
+.auth-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 60%, var(--brand-light) 100%);
+  padding: 48px;
+}
+
+.auth-quote { max-width: 360px; text-align: center; }
+.quote-emojis { font-size: 2.5rem; letter-spacing: 8px; margin-bottom: 28px; }
+.auth-quote h2 { font-size: 2.2rem; color: white; margin-bottom: 16px; }
+.auth-quote p { color: rgba(255,255,255,0.75); font-size: 16px; line-height: 1.7; }
+
+@media (max-width: 900px) {
+  .auth-page { grid-template-columns: 1fr; }
+  .auth-illustration { display: none; }
+  .auth-card { border-right: none; border-radius: 0; padding: 32px 24px; min-height: auto; }
+}
